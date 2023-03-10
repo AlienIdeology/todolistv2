@@ -1,4 +1,97 @@
 import { createApp } from 'vue'
+import { createStore } from 'vuex'
 import App from './App.vue'
+import items from './assets/todoitems.json'
 
-createApp(App).mount('#app')
+const store = createStore({
+    state: {
+        todos: items,
+        maxId: -1
+    },
+    getters: {
+        getItemsList(state) {
+            return state.todos
+        },
+        getMaxId(state) {
+            // find max Id
+            if (state.maxId == -1) {
+                for (const item of state.todos) {
+                    state.maxId = Math.max(state.maxId, item.id)
+                }
+            }
+            return state.maxId
+        }
+    },
+    actions: {
+        addItem({commit, getters}) {
+            const item = {
+                "id": getters.getMaxId+1, 
+                "text": "", 
+                "done": false
+            }
+            commit('addItem', item)
+            commit('incrMaxId')
+            console.log("Adding item:")
+            console.log(item)
+            commit('updateTodosStorage')
+        },
+        updateItem({commit}, item) {
+            console.log("Updating item:")
+            console.log(item)
+            commit('updateItem', item)
+            commit('updateTodosStorage')
+        },
+        deleteItem({commit}, itemId) {
+            console.log("Deleting item:")
+            commit('deleteItem', itemId)
+            commit('updateTodosStorage')
+        },
+        checkAndCreateTodosStorage({commit}) {
+            if (localStorage.getItem('todos')) {
+                commit('updateTodosList')
+            } else {
+                this.createTodosStorage({commit})
+            }
+        },
+        createTodosStorage({commit}) {
+            commit('createTodosStorage')
+        }
+    },
+    mutations: {
+        incrMaxId(state) {
+            state.maxId++
+        },
+        addItem(state, item) {
+            state.todos.push(item)
+        },
+        updateItem(state, item) {
+            let index = state.todos.findIndex(e => e.id === item.id)
+            if (index >= 0)
+                state.todos.splice(index, 1, item);
+        },
+        deleteItem(state, itemId) {
+            state.todos = state.todos.filter(e => e.id !== itemId)
+        },
+        createTodosStorage(state) {
+            localStorage.setItem('todos', JSON.stringify(state.todos))
+            console.log("Created storage:");
+            console.log(localStorage.todos);
+        },
+        updateTodosStorage(state) {
+            localStorage.setItem('todos', JSON.stringify(state.todos))
+            console.log("Updated storage:");
+            console.log(localStorage.todos);
+        },
+        updateTodosList(state) {
+            state.todos = JSON.parse(localStorage.getItem('todos'))
+            console.log("Updated JS todos:");
+            console.log(state.todos);
+        }
+    }
+})
+
+const app = createApp(App)
+
+app.use(store)
+
+app.mount('#app')

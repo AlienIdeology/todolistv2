@@ -1,5 +1,5 @@
 <template>
-    <div @click="$emit('click-button')">
+    <div @click="event => $emit('click-button', event)">
         <slot />
     </div>
 </template>
@@ -7,7 +7,8 @@
 <script>
 
 export default {
-    name: 'TodoItem'
+    name: 'UIButton',
+    emits: ['click-button']
 }
 
 </script>

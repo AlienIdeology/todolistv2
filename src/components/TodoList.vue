@@ -1,26 +1,35 @@
 <template>
     <div id="todolist">
-        <TodoItemContainer v-for="(item, index) in getItemsList" :key="item.id" :item="item" :index="index"/>
-        <Button id="itemAdd" @click-button="addItem()">
+        <UIMenu id="category" label="Category" :options="categories" @menu-changed="categorySelected">
+            <option selected>All</option>
+        </UIMenu>
+        <!-- Used for each todoitem's category selector -->
+        <datalist id="categories">
+            <option v-for="(category, i) in categories" :key="i">{{ category }}</option>
+        </datalist>
+        <TodoItemContainer v-for="(item, index) in todos" :key="item.id" :item="item" :index="index"/>
+        <UIButton id="itemAdd" @click-button="addItem()">
             <button>Add Todo</button>
-        </Button>
+        </UIButton>
     </div>
 </template>
 
 <script>
 
 import TodoItemContainer from './TodoItemContainer.vue';
-import Button from './Button.vue';
-import { mapGetters } from 'vuex';
+import UIButton from './UIButton.vue';
+import UIMenu from './UIMenu.vue';
+import { mapState } from 'vuex';
 
 export default {
     name: 'TodoLists',
     components: {
         TodoItemContainer,
-        Button
+        UIButton,
+        UIMenu
     },
     computed: {
-        ...mapGetters(["getItemsList"])
+        ...mapState(['todos', 'categories'])
     },
     mounted() {
         this.$store.dispatch('checkAndCreateTodosStorage')
@@ -28,6 +37,9 @@ export default {
     methods: {
         addItem() {
             this.$store.dispatch('addItem')
+        },
+        categorySelected(event) {
+            this.$store.dispatch('updateCurrentCategory', event.target.value)
         }
     }
 }

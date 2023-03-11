@@ -28,8 +28,6 @@ export default {
     methods: {
         onDrop(event) {
             const oldIndex = event.dataTransfer.getData('itemIndex')
-            console.log(oldIndex)
-            console.log(this.index)
             if (oldIndex != this.index) {    // item was dragged and dropped to a different container
                 this.$store.dispatch('updateItemOrder', {oldIndex: oldIndex, newIndex: this.index})
             }

@@ -1,11 +1,19 @@
 [
     {
         "id": 1,
+        "category": "Errand",
         "text": "Get milk",
         "done": false
     },
     {
         "id": 2,
+        "category": "School",
+        "text": "Do homework",
+        "done": true
+    },
+    {
+        "id": 3,
+        "category": "None",
         "text": "Eat dinner",
         "done": true
     }

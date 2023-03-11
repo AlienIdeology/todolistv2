@@ -1,24 +1,25 @@
 <template>
     <div id="todolist">
-        <TodoItem v-for="(item, index) in getItemsList" :key="index" :item="item"/>
-        <Button id="itemAdd" text="Add Todo" @click-button="addItem()"/>
+        <TodoItemContainer v-for="(item, index) in getItemsList" :key="item.id" :item="item" :index="index"/>
+        <Button id="itemAdd" @click-button="addItem()">
+            <button>Add Todo</button>
+        </Button>
     </div>
 </template>
 
 <script>
 
-import TodoItem from './TodoItem.vue'
+import TodoItemContainer from './TodoItemContainer.vue';
 import Button from './Button.vue';
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
     name: 'TodoLists',
     components: {
-        TodoItem,
+        TodoItemContainer,
         Button
     },
     computed: {
-        ...mapState(["todos"]),
         ...mapGetters(["getItemsList"])
     },
     mounted() {
@@ -29,18 +30,6 @@ export default {
             this.$store.dispatch('addItem')
         }
     }
-    // watch: {
-    //     /* eslint-disable */
-    //     todoWatch(newV, oldV) {
-    //         console.log(this.$store.state.todos)
-    //     }
-    //     // todoWatch: {
-    //     //     handler () {
-    //     //         console.log(this.$store.state.todos)
-    //     //     },
-    //     //     deep: true 
-    //     // }
-    // }
 }
 
 </script>

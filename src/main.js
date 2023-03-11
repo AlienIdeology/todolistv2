@@ -41,6 +41,10 @@ const store = createStore({
             commit('updateItem', item)
             commit('updateTodosStorage')
         },
+        updateItemOrder({commit}, indexes) {
+            commit('updateItemOrder', indexes)
+            commit('updateTodosStorage')
+        },
         deleteItem({commit}, itemId) {
             console.log("Deleting item:")
             commit('deleteItem', itemId)
@@ -68,6 +72,13 @@ const store = createStore({
             let index = state.todos.findIndex(e => e.id === item.id)
             if (index >= 0)
                 state.todos.splice(index, 1, item);
+        },
+        updateItemOrder(state, {oldIndex, newIndex}) {
+            console.log("old: " + oldIndex + " new: " + newIndex)
+            // remove item from todo list at old index
+            const moved = state.todos.splice(oldIndex, 1)[0]
+            state.todos.splice(newIndex, 0, moved)
+            console.log(state.todos)
         },
         deleteItem(state, itemId) {
             state.todos = state.todos.filter(e => e.id !== itemId)

@@ -1,22 +1,17 @@
 <template>
-    <button @click="$emit('click-button')">{{ text }}</button>
+    <div @click="$emit('click-button')">
+        <slot />
+    </div>
 </template>
 
 <script>
 
 export default {
-    name: 'TodoItem',
-    props:  {
-        text: String
-    }
+    name: 'TodoItem'
 }
 
 </script>
 
 <style>
-    .todoitem {
-        border-color: red;
-        border-radius: 5px;
-    }
 </style>
   

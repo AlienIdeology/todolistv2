@@ -1,5 +1,10 @@
 # vuex-todo
 
+## Some Features
+ - Category system: Each todo item can be assigned a category, and the list can be filtered by category
+ - Drag-and-drop: Todo items can be re-ordered by dragging and dropping
+ - Languages: The website's language can be changed
+
 ## Project setup
 ```
 npm install

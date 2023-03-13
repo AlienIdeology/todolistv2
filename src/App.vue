@@ -1,17 +1,22 @@
 <template>
     <SiteHeader />
+    <!-- <div id="content-wrapper"> -->
     <TodoList />
+    <!-- </div> -->
+    <SiteFooter />
 </template>
 
 <script>
 import TodoList from './components/TodoList.vue'
 import SiteHeader from './components/SiteHeader.vue';
+import SiteFooter from './components/SiteFooter.vue';
 
 export default {
     name: 'App',
     components: {
         TodoList,
-        SiteHeader
+        SiteHeader,
+        SiteFooter
     }
 }
 </script>
@@ -19,6 +24,11 @@ export default {
 <style>
     :root {
         background-color: #475C7A;
+        --theme-color: #FCBB6D;
+        --theme-dropdown: #eda600;
+        --background-input: #4887a4;
+        --text-header: #623545;
+        --text-body: white;
     }
 
     #app {
@@ -30,10 +40,16 @@ export default {
         margin: 0;
         padding: 0;
         width: 100vw;
-        height: 100vh;
+
+        /* push footer to end of page */
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
     }
 
     body {
-        margin: 0
+        height: 100%;
+        margin: 0;
+        padding: 0;
     }
 </style>

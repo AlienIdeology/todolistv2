@@ -9,15 +9,16 @@
             "categoryLabel": "Category",
             "allCategory": "All",
             "defaultCategory": "None",
-            "addTodoLabel": "Add Todo Item"
-
+            "addTodoLabel": "Add Todo Item",
+            "footer": "Made by Allen Liao (2020)<br/> All icons are from <a href=\"https://icons8.com/license\">ICONS8</a>"
         },
         "zh-tw": {
             "title": "待辦清單",
             "categoryLabel": "類別",
             "allCategory": "全部",
             "defaultCategory": "無",
-            "addTodoLabel": "新增待辦事項"
+            "addTodoLabel": "新增待辦事項",
+            "footer": "廖以霖製作 (2020)<br/> 所有圖標均來自 <a href=\"https://icons8.com/license\">ICONS8</a>"
         }
     }
 }

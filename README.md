@@ -22,3 +22,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Icon use
+All icons used in this site belongs to [Icons8.com](https://icons8.com/license).

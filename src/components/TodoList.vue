@@ -80,6 +80,19 @@ export default {
         margin-left: 0.5em;
     }
 
+    #categorySelector select {
+        color: var(--text-header);
+        border-radius: 5px;
+        border-width: 0px;
+        background-color: var(--theme-dropdown);
+    }
+
+    #categorySelector select:focus {
+        outline: none;
+        border-width: 1px;
+        border-color: #623545;
+    }
+
     #itemAdd {
         align-self: center;
         margin: 1em;
@@ -87,15 +100,16 @@ export default {
 
     #itemAdd button {
         border: none;
-        background-color: #4887a4;
+        background-color: var(--background-input);
         font-size: 1.5em;
         border-radius: 10px;
         padding: 0.5em;
+        color: var(--text-body);
     }
 
     #itemAdd button:hover:not(:active) {
         border-width: 1px;
         border-style: solid;
-        border-color: #FCBB6D;
+        border-color: var(--theme-color);
     }
 </style>

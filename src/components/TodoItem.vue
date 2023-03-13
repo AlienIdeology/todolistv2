@@ -11,7 +11,7 @@
         <input class="itemText" type="text" :value="item.text" @input="textInput" />
 
         <UIButton class="itemDel" text="Delete" @click-button="deleteItem()">
-            <img src="https://img.icons8.com/color/512/cancel.png">
+            <img src="../assets/red-x.png">
         </UIButton>
     </div>
 </template>
@@ -87,6 +87,7 @@ export default {
         padding: 0.7em;
         margin-left: auto;
         margin-right: auto;
+        cursor: move;
 
         display: flex;
         flex-direction: row;
@@ -126,9 +127,9 @@ export default {
         border-radius: 50%;
         border-width: 2px;
         border-style: solid;
-        border-color: #FCBB6D;;
+        border-color: var(--theme-color);
     }
-    
+
     .itemDone .doneInner {
         box-sizing: border-box;
         position: absolute;
@@ -138,7 +139,7 @@ export default {
         aspect-ratio: 1 / 1;
 
         border-radius: 50%;
-        background-color: #FCBB6D;
+        background-color: var(--theme-color);
     }
 
     .itemCategory {
@@ -151,12 +152,14 @@ export default {
         padding: 2px;
         border-radius: 10px;
         border-width: 0px;
-        background-color: #617796;
+        /* background-color: #617796; */
+        background-color: var(--background-input);
+        color: var(--text-body);
     }
 
     .itemCategory:focus {
         border-width: 1px;
-        border-color: #FCBB6D;
+        border-color: var(--theme-color);
         /* #a8bbd5; */
         border-style: solid;
         outline: 0px;
@@ -167,19 +170,20 @@ export default {
         font-size: 1.5em;
         background: transparent;
         border-width: 0px;
-        color: white;
+        color: var(--text-body);
     }
 
     .itemText:focus {
         border-bottom-width: 2px;
-        border-color: #FCBB6D;
+        border-color: var(--theme-color);
         outline: 0px;
     }
 
     .itemDel {
         flex-grow: 1;
-        width: 3em;
-        height: 3em;
+        /* width: 3em; */
+        width: fit-content;
+        /* height: 3em; */
         cursor: pointer;
 
         /* center the image */
@@ -190,7 +194,7 @@ export default {
 
     .itemDel * {
         height: inherit; /* make the image the same size as the container */
-        width: inherit;
+        width: 3em;
 
         /* Transformation for rotating the delete button */
         -webkit-transition: -webkit-transform 1s ease-out;

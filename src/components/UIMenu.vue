@@ -1,6 +1,6 @@
 <template>
-    <label for="id">{{ label }}</label>
-    <select id="id" @change="event => $emit('menu-changed', event)">
+    <label :for="id">{{ label }}</label>
+    <select :id="id" @change="event => $emit('menu-changed', event)">
         <option v-for="(option, i) in options" :key="i">{{ option }}</option>
         <slot /> <!-- additional options -->
     </select>

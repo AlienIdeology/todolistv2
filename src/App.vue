@@ -1,49 +1,39 @@
 <template>
-    <nav>
-        <h1>Todolist</h1>
-    </nav>
-  <TodoList />
+    <SiteHeader />
+    <TodoList />
 </template>
 
 <script>
 import TodoList from './components/TodoList.vue'
+import SiteHeader from './components/SiteHeader.vue';
 
 export default {
-  name: 'App',
-  components: {
-    TodoList
-  }
+    name: 'App',
+    components: {
+        TodoList,
+        SiteHeader
+    }
 }
 </script>
 
 <style>
-body {
-    margin: 0
-}
+    :root {
+        background-color: #475C7A;
+    }
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-  margin: 0;
-  padding: 0;
-}
+    #app {
+        font-family: Avenir, Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        margin-top: 60px;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+    }
 
-nav {
-    position: relative;
-    margin: 0;
-    margin-bottom: 1em;
-    height: 15vh;
-    background-color: rgb(127, 242, 255);
-    display: flex;
-}
-
-nav h1 {
-    margin: auto;
-    display: inline-block;
-    font-size: 2em;
-}
+    body {
+        margin: 0
+    }
 </style>

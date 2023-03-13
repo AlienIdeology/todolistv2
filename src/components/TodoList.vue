@@ -1,25 +1,32 @@
 <template>
     <div id="todolist">
-        <UIMenu id="category" label="Category" :options="categories" @menu-changed="categorySelected">
-            <option selected>All</option>
-        </UIMenu>
+        <div id="categorySelector">
+            <UIMenu id="category" :label="getDictionary.categoryLabel" :options="categories" @menu-changed="categorySelected">
+                <option selected>{{ getDictionary.allCategory }}</option>
+            </UIMenu>
+        </div>
+
         <!-- Used for each todoitem's category selector -->
         <datalist id="categories">
-            <option v-for="(category, i) in categories" :key="i">{{ category }}</option>
+            <template v-for="(category, i) in categories" :key="i">
+                <!-- use <template> to prevent the "none" category from showing with below v-for -->
+                <option v-if="category!==getDictionary.defaultCategory">{{ category }}</option>
+            </template>
         </datalist>
+
         <TodoItemContainer v-for="(item, index) in todos" :key="item.id" :item="item" :index="index"/>
+
         <UIButton id="itemAdd" @click-button="addItem()">
-            <button>Add Todo</button>
+            <button>{{ getDictionary.addTodoLabel }}</button>
         </UIButton>
     </div>
 </template>
 
 <script>
-
 import TodoItemContainer from './TodoItemContainer.vue';
 import UIButton from './UIButton.vue';
 import UIMenu from './UIMenu.vue';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
     name: 'TodoLists',
@@ -29,7 +36,8 @@ export default {
         UIMenu
     },
     computed: {
-        ...mapState(['todos', 'categories'])
+        ...mapState(['todos', 'categories']),
+        ...mapGetters(['getDictionary'])
     },
     mounted() {
         this.$store.dispatch('checkAndCreateTodosStorage')
@@ -48,10 +56,6 @@ export default {
 
 <style>
     #todolist {
-        border-color: red;
-        border-radius: 2px;
-        border-style: solid;
-
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -62,7 +66,36 @@ export default {
         margin-bottom: .3em;
     }
 
+    #categorySelector {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: center;
+        color: #FCBB6D;
+    }
+
+    #categorySelector > * {
+        margin-left: 0.5em;
+    }
+
     #itemAdd {
         align-self: center;
+        margin: 1em;
+    }
+
+    #itemAdd button {
+        border: none;
+        background-color: #4887a4;
+        font-size: 1.5em;
+        border-radius: 10px;
+        padding: 0.5em;
+    }
+
+    #itemAdd button:hover:not(:active) {
+        border-width: 1px;
+        border-style: solid;
+        border-color: #FCBB6D;
     }
 </style>

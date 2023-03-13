@@ -1,10 +1,15 @@
 <template>
-    <div v-if="show" class="todoitem" draggable="true" @dragstart="startDrag" @dragend="endDrag">
+    <div class="todoitem" draggable="true" @dragstart="startDrag" @dragend="endDrag">
         <UIButton class="itemDone" @click-button="markDone()">
-            <button>Done</button>
+            <div class="doneOutline">
+                <div class="doneInner" v-if="item.done"></div>
+            </div>
         </UIButton>
+
         <input class="itemCategory" type="text" list="categories" :value="item.category" @change="categoryChange" />
+
         <input class="itemText" type="text" :value="item.text" @input="textInput" />
+
         <UIButton class="itemDel" text="Delete" @click-button="deleteItem()">
             <img src="https://img.icons8.com/color/512/cancel.png">
         </UIButton>
@@ -12,7 +17,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import UIButton from './UIButton.vue';
 
 export default {
@@ -31,17 +36,13 @@ export default {
         UIButton
     },
     computed: {
-        ...mapState(['todos','currCategory']),
-        show() {
-            if (this.currCategory !== "All" && this.currCategory !== this.item.category) {
-                return false
-            } else {
-                return true
-            }
-        }
+        ...mapState(['todos']),
+        ...mapGetters(['getCurrCategory'])
     },
     methods: {
         markDone() {
+            // console.log(event.currentTarget)
+            // event.currentTarget.done = !this.item.done
             this.$store.dispatch('updateItem', {index: this.index, property: 'done', value: !this.item.done})
         },
         deleteItem() {
@@ -56,14 +57,9 @@ export default {
             let val = event.target.value
             let updateCurrCat = false
             // if this item is the only one item showing, the current category should be updated as well
-            if (this.currCategory === this.item.category &&
+            if (this.getCurrCategory === this.item.category &&
                 this.todos.filter(e => e.category === this.item.category).length == 1) {
                 updateCurrCat = true
-            }
-
-            // Make no category = "None"
-            if (val === "") {
-                val = "None"
             }
 
             this.$store.dispatch('updateItem', {index: this.index, property: 'category', value: val})
@@ -79,16 +75,6 @@ export default {
         endDrag(event) {
             event.target.classList.remove('dragged')
         },
-    },
-    watch: {
-        // currCategory(newV) {
-        //     console.log("item " + this.item.text + " watching " + newV)
-        //     if (newV !== "All" && newV !== this.item.category) {
-        //         this.show = false
-        //     } else {
-        //         this.show = true
-        //     }
-        // }
     }
 }
 
@@ -98,51 +84,103 @@ export default {
     .todoitem {
         height: 80%;
         width: 70%;
-        margin: 0.2em;
+        padding: 0.7em;
         margin-left: auto;
         margin-right: auto;
-        border-radius: 2px;
-        border-style: solid;
-        border-color: rgba(0, 0, 255, 0.357);
-        background-color: white;
-        /* position: absolute; */
 
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: center;
         align-items: stretch;
-        row-gap: 5%;
+        column-gap: 2%;
+    }
+
+    .todoitem:hover {
+        background-color: #536e93;
     }
 
     .dragged {
         opacity: 0.4;
-        border: 2px dashed #9e9e9e;
+        border: 1px solid #9e9e9e;
     }
 
     .itemDone {
         flex-grow: 1;
+        width: 3em;
+        height: 3em;
+        cursor: pointer;
 
-        /* center the image */
+        /* center the content of the button */
         display: flex;
         align-items: center;
         justify-content: space-around;
     }
 
-    .itemDone * {
-        height: inherit; /* make the image the same size as the container */
-        width: inherit;
+    .itemDone .doneOutline {
+        box-sizing: border-box;
+        position: relative;
+        width: 2.6em; 
+        aspect-ratio: 1 / 1;
+
+        border-radius: 50%;
+        border-width: 2px;
+        border-style: solid;
+        border-color: #FCBB6D;;
+    }
+    
+    .itemDone .doneInner {
+        box-sizing: border-box;
+        position: absolute;
+        top: 5%;
+        left: 5%;
+        width: 90%;
+        aspect-ratio: 1 / 1;
+
+        border-radius: 50%;
+        background-color: #FCBB6D;
+    }
+
+    .itemCategory {
+        flex-grow: 1;
+        text-align: center;
+
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        padding: 2px;
+        border-radius: 10px;
+        border-width: 0px;
+        background-color: #617796;
+    }
+
+    .itemCategory:focus {
+        border-width: 1px;
+        border-color: #FCBB6D;
+        /* #a8bbd5; */
+        border-style: solid;
+        outline: 0px;
     }
 
     .itemText {
         flex-grow: 10;
         font-size: 1.5em;
+        background: transparent;
+        border-width: 0px;
+        color: white;
+    }
+
+    .itemText:focus {
+        border-bottom-width: 2px;
+        border-color: #FCBB6D;
+        outline: 0px;
     }
 
     .itemDel {
         flex-grow: 1;
         width: 3em;
         height: 3em;
+        cursor: pointer;
 
         /* center the image */
         display: flex;
@@ -154,20 +192,16 @@ export default {
         height: inherit; /* make the image the same size as the container */
         width: inherit;
 
-        /* Rotate the delete button */
-        -webkit-transform:rotate(45deg);
-        -moz-transform:rotate(45deg);
-        transform:rotate(45deg);
-
+        /* Transformation for rotating the delete button */
         -webkit-transition: -webkit-transform 1s ease-out;
         -moz-transition: -moz-transform 1s ease-out;
         transition: transform 0.5s ease-out;
     }
 
     .itemDel *:hover {
-        -webkit-transform:rotate(-45deg);
-        -moz-transform:rotate(-45deg);
-        transform:rotate(-45deg);
+        /* Rotate the delete button */
+        -webkit-transform:rotate(-90deg);
+        -moz-transform:rotate(-90deg);
+        transform:rotate(-90deg);
     }
 </style>
-  

@@ -13,7 +13,7 @@
     },
     {
         "id": 3,
-        "category": "None",
+        "category": "",
         "text": "Eat dinner",
         "done": true
     }

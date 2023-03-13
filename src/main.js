@@ -2,15 +2,33 @@ import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import App from './App.vue'
 import items from './assets/todoitems.json'
+import locale from './assets/locale.json'
 
 const store = createStore({
     state: {
         todos: items,
+        language: null,
+        dictionary: null,
+        currCategory: null,
         categories: [],     // list of categories
-        currCategory: "All",    // the current category selected
         maxId: -1
     },
     getters: {
+        getLanguages() {
+            return locale.languages
+        },
+        getDictionary(state) {
+            if (!state.dictionary) {
+                state.dictionary = locale.dictionaries[locale.languages[0]]
+            }
+            return state.dictionary
+        },
+        getCurrCategory(state) {    // the current category selected
+            if(!state.currCategory) {
+                state.currCategory = state.dictionary.allCategory
+            }
+            return state.currCategory
+        },
         getMaxId(state) {
             // find max Id
             if (state.maxId == -1) {
@@ -23,9 +41,13 @@ const store = createStore({
     },
     actions: {
         addItem({commit, getters}) {
+            let category = "" // for default categort
+            if (getters.getCurrCategory !== getters.getDictionary.allCategory &&
+                getters.getCurrCategory !== getters.getDictionary.defaultCategory)
+                category = getters.getCurrCategory
             const item = {
-                "id": getters.getMaxId+1, 
-                "category": "None",
+                "id": getters.getMaxId+1,
+                "category": category,
                 "text": "", 
                 "done": false
             }
@@ -69,6 +91,16 @@ const store = createStore({
         },
         updateCurrentCategory({commit}, category) {
             commit('updateCurrentCategory', category)
+        },
+        updateLanguage({commit, getters}, language) {
+            // need to take care of old "all" and "none" category changes
+            const oldDict = getters.getDictionary
+            commit('updateLanguage', language)
+            if (getters.getCurrCategory === oldDict.allCategory)
+                commit('updateCurrentCategory', getters.getDictionary.allCategory)
+            if (getters.getCurrCategory === oldDict.defaultCategory)
+                commit('updateCurrentCategory', getters.getDictionary.defaultCategory)
+            commit('updateCategories') // update category list
         }
     },
     mutations: {
@@ -107,13 +139,25 @@ const store = createStore({
         },
         updateCategories(state) {
             state.categories = [] // reset categories
+            let addNone = false
             state.todos.forEach(element => {
+                // add the "none" category
+                if (element.category === "") {
+                    addNone = true
+                    return
+                }
+
                 if (!state.categories.includes(element.category))
                     state.categories.push(element.category)
-            });
+            })
+            if (addNone) state.categories.push(state.dictionary.defaultCategory)
         },
         updateCurrentCategory(state, category) {
             state.currCategory = category;
+        },
+        updateLanguage(state, language) {
+            state.language = language
+            state.dictionary = locale.dictionaries[language]
         }
     }
 })

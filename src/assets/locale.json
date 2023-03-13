@@ -1,0 +1,23 @@
+{
+    "languages": [
+        "en",
+        "zh-tw"
+    ],
+    "dictionaries": {
+        "en": {
+            "title": "Todolist",
+            "categoryLabel": "Category",
+            "allCategory": "All",
+            "defaultCategory": "None",
+            "addTodoLabel": "Add Todo Item"
+
+        },
+        "zh-tw": {
+            "title": "待辦清單",
+            "categoryLabel": "類別",
+            "allCategory": "全部",
+            "defaultCategory": "無",
+            "addTodoLabel": "新增待辦事項"
+        }
+    }
+}

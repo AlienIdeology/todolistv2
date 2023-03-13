@@ -1,5 +1,5 @@
 <template>
-    <div class="todoitemcontainer"
+    <div v-if="show" lass="todoitemcontainer"
         @drop="onDrop($event)"
         @dragover.prevent
         @dragenter.prevent>
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import TodoItem from './TodoItem.vue';
 
 export default {
@@ -25,6 +26,14 @@ export default {
     components: {
         TodoItem
     },
+    computed: {
+        ...mapGetters(['getDictionary','getCurrCategory']),
+        show() {
+            return this.getCurrCategory === this.getDictionary.allCategory ||  // curr category "All" category
+                this.getCurrCategory === this.item.category ||  // curr category matches this item's category
+                (this.getCurrCategory === this.getDictionary.defaultCategory && this.item.category === "")  // "none" category
+        }
+    },
     methods: {
         onDrop(event) {
             const oldIndex = event.dataTransfer.getData('itemIndex')
@@ -39,7 +48,7 @@ export default {
 
 <style>
     .todoitemcontainer {
-        background-color: rgb(241, 240, 240);
+        /* margin: 0.2em; */
     }
 </style>
   
